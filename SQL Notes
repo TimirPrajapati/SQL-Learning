@@ -164,5 +164,319 @@ Questions
     What is normalization, and why is it important?
         Answer: Normalization is the process of organizing data in a database to reduce redundancy and improve data integrity. It is important for efficient data storage and retrieval.
 
-sdasjdajsdas
-sdasdsada
+
+### SQL SELECT Statement:
+    -- The SELECT statement is used to select data from a database.
+
+SELECT Syntax
+    -- SELECT column1, column2, ... FROM table_name;
+SELECT Example: 
+mysql> select balance, account_type from accounts;
++----------+--------------+
+| balance  | account_type |
++----------+--------------+
+|  5000.00 | checking     |
+| 10000.00 | savings      |
+|  7000.00 | checking     |
+|  3000.00 | checking     |
++----------+--------------+
+4 rows in set (0.03 sec)
+
+Select ALL Columns
+    -- To select ALL columns, without specifying every column name, use the SELECT * syntax:
+Example:
+mysql> select * from accounts;
++------------+-------------+--------------+----------+
+| account_id | customer_id | account_type | balance  |
++------------+-------------+--------------+----------+
+|        101 |           1 | checking     |  5000.00 |
+|        102 |           1 | savings      | 10000.00 |
+|        103 |           2 | checking     |  7000.00 |
+|        104 |           3 | checking     |  3000.00 |
++------------+-------------+--------------+----------+
+4 rows in set (0.05 sec)
+
+SQL SELECT DISTINCT Statement: 
+-- The SELECT DISTINCT statement is used to return only distinct (unique) values.
+
+SELECT DISTINCT Syntax:
+    -- SELECT DISTINCT column1, column2, ... FROM table_name;
+Example:
+mysql> SELECT DISTINCT account_type, customer_id from accounts;
++--------------+-------------+
+| account_type | customer_id |
++--------------+-------------+
+| checking     |           1 |
+| savings      |           1 |
+| checking     |           2 |
+| checking     |           3 |
++--------------+-------------+
+4 rows in set (0.04 sec)
+
+Count Distinct Values
+    -- By using the COUNT() function with the DISTINCT keyword, we can count the number of unique countries.
+
+SELECT COUNT DISTINCT Syntax:
+    -- SELECT COUNT(DISTINCT COLUMN1) FROM table_name;
+Example:
+mysql> select count(distinct transaction_type) from transactions;
++----------------------------------+
+| count(distinct transaction_type) |
++----------------------------------+
+|                                2 |
++----------------------------------+
+1 row in set (0.01 sec)
+
+
+### SQL WHERE Clause
+    -- The WHERE clause is used to filter records.
+    -- The WHERE clause is used to extract only those records that fulfill a specific condition.
+
+WHERE Syntax:
+    --  SELECT column1, column2, ...
+        FROM table_name
+        WHERE condition;
+Example:
+mysql> select * from transactions where status = "failed";
++----------------+------------+---------+------------------+--------+------------+
+| transaction_id | account_id | amount  | transaction_type | status | created_at |
++----------------+------------+---------+------------------+--------+------------+
+|           1003 |        102 | 1000.00 | debit            | failed | 2026-03-03 |
++----------------+------------+---------+------------------+--------+------------+
+1 row in set (0.00 sec)
+
+IMP Note: 
+
+-- The WHERE clause is not only used in SELECT statements, it is also used in UPDATE, DELETE, etc.
+-- SQL requires single quotes around text values (most database systems will also allow double quotes).
+-- However, numeric fields should not be enclosed in quotes.
+
+### Operators in The WHERE Clause
+    -- =    Equal
+    -- >    Greater than    
+    -- <   Less than   
+    -- >=  Greater than or equal   
+    -- <=  Less than or equal  
+    -- <> !=  Not equal. Note: In some versions of SQL this operator may be written as != 
+    -- BETWEEN Between a certain range 
+    -- LIKE    Search for a pattern    
+    -- IN  To specify multiple possible values for a column
+
+1) = Equal:
+mysql> select * from transactions where status = "failed";
++----------------+------------+---------+------------------+--------+------------+
+| transaction_id | account_id | amount  | transaction_type | status | created_at |
++----------------+------------+---------+------------------+--------+------------+
+|           1003 |        102 | 1000.00 | debit            | failed | 2026-03-03 |
++----------------+------------+---------+------------------+--------+------------+
+1 row in set (0.00 sec)
+mysql> select * from transactions where amount = 1000;
++----------------+------------+---------+------------------+--------+------------+
+| transaction_id | account_id | amount  | transaction_type | status | created_at |
++----------------+------------+---------+------------------+--------+------------+
+|           1003 |        102 | 1000.00 | debit            | failed | 2026-03-03 |
++----------------+------------+---------+------------------+--------+------------+
+1 row in set (0.03 sec)
+
+2) > Greater than
+mysql> select * from transactions where amount > 300;
++----------------+------------+---------+------------------+---------+------------+
+| transaction_id | account_id | amount  | transaction_type | status  | created_at |
++----------------+------------+---------+------------------+---------+------------+
+|           1002 |        101 |  500.00 | credit           | success | 2026-03-02 |
+|           1003 |        102 | 1000.00 | debit            | failed  | 2026-03-03 |
+|           1004 |        103 |  700.00 | debit            | success | 2026-03-01 |
++----------------+------------+---------+------------------+---------+------------+
+3 rows in set (0.00 sec)
+
+3) <   Less than
+mysql> select * from transactions where amount < 300;
++----------------+------------+--------+------------------+---------+------------+
+| transaction_id | account_id | amount | transaction_type | status  | created_at |
++----------------+------------+--------+------------------+---------+------------+
+|           1001 |        101 | 200.00 | debit            | success | 2026-03-01 |
++----------------+------------+--------+------------------+---------+------------+
+1 row in set (0.00 sec)
+
+4) >=  Greater than or equal
+mysql> select * from transactions where amount >= 300;
++----------------+------------+---------+------------------+---------+------------+
+| transaction_id | account_id | amount  | transaction_type | status  | created_at |
++----------------+------------+---------+------------------+---------+------------+
+|           1002 |        101 |  500.00 | credit           | success | 2026-03-02 |
+|           1003 |        102 | 1000.00 | debit            | failed  | 2026-03-03 |
+|           1004 |        103 |  700.00 | debit            | success | 2026-03-01 |
+|           1005 |        104 |  300.00 | credit           | success | 2026-03-04 |
++----------------+------------+---------+------------------+---------+------------+
+4 rows in set (0.00 sec)
+
+5) <=  Less than or equal
+mysql> select * from transactions where amount <= 300;
++----------------+------------+--------+------------------+---------+------------+
+| transaction_id | account_id | amount | transaction_type | status  | created_at |
++----------------+------------+--------+------------------+---------+------------+
+|           1001 |        101 | 200.00 | debit            | success | 2026-03-01 |
+|           1005 |        104 | 300.00 | credit           | success | 2026-03-04 |
++----------------+------------+--------+------------------+---------+------------+
+2 rows in set (0.00 sec)
+
+6) <> !=  Not equal
+mysql> select * from transactions where amount <> 300;
++----------------+------------+---------+------------------+---------+------------+
+| transaction_id | account_id | amount  | transaction_type | status  | created_at |
++----------------+------------+---------+------------------+---------+------------+
+|           1001 |        101 |  200.00 | debit            | success | 2026-03-01 |
+|           1002 |        101 |  500.00 | credit           | success | 2026-03-02 |
+|           1003 |        102 | 1000.00 | debit            | failed  | 2026-03-03 |
+|           1004 |        103 |  700.00 | debit            | success | 2026-03-01 |
++----------------+------------+---------+------------------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from transactions where amount != 300;
++----------------+------------+---------+------------------+---------+------------+
+| transaction_id | account_id | amount  | transaction_type | status  | created_at |
++----------------+------------+---------+------------------+---------+------------+
+|           1001 |        101 |  200.00 | debit            | success | 2026-03-01 |
+|           1002 |        101 |  500.00 | credit           | success | 2026-03-02 |
+|           1003 |        102 | 1000.00 | debit            | failed  | 2026-03-03 |
+|           1004 |        103 |  700.00 | debit            | success | 2026-03-01 |
++----------------+------------+---------+------------------+---------+------------+
+4 rows in set (0.00 sec)
+
+7) BETWEEN Between a certain range
+mysql> select * from transactions where amount between 200 and 700;
++----------------+------------+--------+------------------+---------+------------+
+| transaction_id | account_id | amount | transaction_type | status  | created_at |
++----------------+------------+--------+------------------+---------+------------+
+|           1001 |        101 | 200.00 | debit            | success | 2026-03-01 |
+|           1002 |        101 | 500.00 | credit           | success | 2026-03-02 |
+|           1004 |        103 | 700.00 | debit            | success | 2026-03-01 |
+|           1005 |        104 | 300.00 | credit           | success | 2026-03-04 |
++----------------+------------+--------+------------------+---------+------------+
+4 rows in set (0.00 sec)
+
+8) LIKE    Search for a pattern
+mysql> select * from transactions where status like 's%';
++----------------+------------+--------+------------------+---------+------------+
+| transaction_id | account_id | amount | transaction_type | status  | created_at |
++----------------+------------+--------+------------------+---------+------------+
+|           1001 |        101 | 200.00 | debit            | success | 2026-03-01 |
+|           1002 |        101 | 500.00 | credit           | success | 2026-03-02 |
+|           1004 |        103 | 700.00 | debit            | success | 2026-03-01 |
+|           1005 |        104 | 300.00 | credit           | success | 2026-03-04 |
++----------------+------------+--------+------------------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from transactions where status like 'f%';
++----------------+------------+---------+------------------+--------+------------+
+| transaction_id | account_id | amount  | transaction_type | status | created_at |
++----------------+------------+---------+------------------+--------+------------+
+|           1003 |        102 | 1000.00 | debit            | failed | 2026-03-03 |
++----------------+------------+---------+------------------+--------+------------+
+1 row in set (0.00 sec)
+
+9) IN  To specify multiple possible values for a column
+mysql> select * from transactions where transaction_type in ('debit', 'credit');
++----------------+------------+---------+------------------+---------+------------+
+| transaction_id | account_id | amount  | transaction_type | status  | created_at |
++----------------+------------+---------+------------------+---------+------------+
+|           1001 |        101 |  200.00 | debit            | success | 2026-03-01 |
+|           1002 |        101 |  500.00 | credit           | success | 2026-03-02 |
+|           1003 |        102 | 1000.00 | debit            | failed  | 2026-03-03 |
+|           1004 |        103 |  700.00 | debit            | success | 2026-03-01 |
+|           1005 |        104 |  300.00 | credit           | success | 2026-03-04 |
++----------------+------------+---------+------------------+---------+------------+
+5 rows in set (0.01 sec)
+
+### The SQL ORDER BY
+
+-- The ORDER BY keyword is used to sort the result-set in ascending or descending order.
+-- The ORDER BY keyword sorts the result-set in ascending order (ASC) by default.
+
+ORDER BY Syntax: 
+    SELECT column1, column2, ...
+    FROM table_name
+    ORDER BY column1, column2, ... ASC|DESC;
+
+Example:
+mysql> select email
+    -> from customers
+    -> order by customer_id;
++----------------+
+| email          |
++----------------+
+| tim@gmail.com  |
+| sara@gmail.com |
+| john@gmail.com |
++----------------+
+3 rows in set (0.01 sec)
+
+mysql> select email
+    -> from customers
+    -> order by name;
++----------------+
+| email          |
++----------------+
+| john@gmail.com |
+| sara@gmail.com |
+| tim@gmail.com  |
++----------------+
+3 rows in set (0.01 sec)
+
+
+ORDER BY DESC:
+    -- To sort the records in descending order, use the DESC keyword.
+
+Example:
+mysql> select name
+    -> from customers
+    -> order by name asc;
++------+
+| name |
++------+
+| John |
+| Sara |
+| Tim  |
++------+
+3 rows in set (0.00 sec)
+
+mysql> select name
+    -> from customers
+    -> order by name desc;
++------+
+| name |
++------+
+| Tim  |
+| Sara |
+| John |
++------+
+3 rows in set (0.00 sec)
+
+Note : Order Alphabetically --> For string values, the ORDER BY keyword will sort the values in the column alphabetically:
+
+Combine ASC and DESC: 
+    The following SQL statement selects all customers from the "Customers" table, and sorts it ASCENDING by the "Country" and DESCENDING by the "CustomerName" column:
+
+Example: 
+mysql> select name
+    -> from customers
+    -> order by name asc, customer_id desc;
++------+
+| name |
++------+
+| John |
+| Sara |
+| Tim  |
++------+
+3 rows in set (0.00 sec)
+
+What is the purpose of the SQL ORDER BY keyword? -- To sort records in ascending or descending order
+Which SQL statement sorts products from highest to lowest price? -- SELECT * FROM Products ORDER BY Price DESC;
+Select all records from the Customers table, sort the result alphabetically by the column City. -- SELECT * FROM Customers ORDER BY City;
+Select all records from the Customers table, sort the result reversed alphabetically by the column City. -- SELECT * FROM Customers ORDER BY City DESC;
+
+Select all records from the Customers table, sort the result alphabetically, first by the column Country, then, by the column City. -- SELECT * FROM Customers ORDER BY Country, City;
+
+In the SQL ORDER BY clause, what is the default sorting order if ASC or DESC is not specified? -- Ascending
+
+### The SQL AND Operator:
