@@ -480,3 +480,192 @@ Select all records from the Customers table, sort the result alphabetically, fir
 In the SQL ORDER BY clause, what is the default sorting order if ASC or DESC is not specified? -- Ascending
 
 ### The SQL AND Operator:
+
+
+
+
+
+
+
+########################################################################## Udemy ########################################################################################################
+
+
+Introduction
+Query Data (SELECT)
+Data Definition (DDL)
+Data Manipulation (DML)
+Filtering Data
+Combining Data
+Row-Level Functions
+Aggregation & Analytical Functions
+Advanced SQL Techniques
+Performance Optimization
+AI & SQL
+SQL Projects
+
+
+Introduction
+
+What is SQL & Database
+
+Database : It is container that stores the data
+SQL - It is the language that we use in order to talk to the database
+SQL ( Structured Query Language)
+
+
+Types of database
+
+SQL 
+    Relational - column, row - Microsoft SQL Server, MySQL, PostgreSQL
+
+NoSQL 
+    Key-Value  - Big dictionary like word and meaning - Redis, Amazon DynamoDB
+    column-based - Column based  - Apache Cassandra, Amazon RedShift
+    Graph   - Relationship between objects - Neo4j
+    Document - data fits in one page -- MongoDB
+
+
+Types of SQL Commands
+
+Data Definition Language
+    CREATE  create brand new table
+    ALTER   Edit something
+    DROP    Delete something
+
+Data Manipulation Language
+    INSERT  Add new data
+    UPDATE  update existing data
+    DELETE  delete something
+
+Data Query Language
+    SELECT  Query our data
+
+Why SQL?
+    Talk to the data
+
+
+SQL Components
+    Clauses & Keywords  --> SELECT, FROM, WHERE
+    Function            --> LOWER(country)
+    Operators           --> = > <
+    Static value        --> 'Italy'[any data]
+
+
+SELECT * (All)  --> Retrieves ALL columns (Everything)
+FROM            --> Tells SQL Where to find your data
+
+SELECT * 
+FROM Table
+
+Two types of comments
+
+-- This is a comment
+
+/* This
+is 
+a 
+comment */
+
+
+################################## SELECT & FROM ################################## 
+
+-- Retrieve all customer data
+
+SELECT * FROM customers;
+
+mysql> SELECT *
+    -> FROM CUSTOMERS;
++-------------+------+----------------+-----------+
+| customer_id | name | email          | city      |
++-------------+------+----------------+-----------+
+|           1 | Tim  | tim@gmail.com  | Toronto   |
+|           2 | Sara | sara@gmail.com | Vancouver |
+|           3 | John | john@gmail.com | Toronto   |
++-------------+------+----------------+-----------+
+
+mysql> SELECT *
+    -> FROM customers;
++-------------+------+----------------+-----------+
+| customer_id | name | email          | city      |
++-------------+------+----------------+-----------+
+|           1 | Tim  | tim@gmail.com  | Toronto   |
+|           2 | Sara | sara@gmail.com | Vancouver |
+|           3 | John | john@gmail.com | Toronto   |
++-------------+------+----------------+-----------+
+3 rows in set (0.03 sec)
+
+-- Retrieve all transaction data
+
+SELECT * FROM TRANSACTIONS;
+
+mysql> SELECT *
+    -> FROM TRANSACTIONS;
++----------------+------------+---------+------------------+---------+------------+
+| transaction_id | account_id | amount  | transaction_type | status  | created_at |
++----------------+------------+---------+------------------+---------+------------+
+|           1001 |        101 |  200.00 | debit            | success | 2026-03-01 |
+|           1002 |        101 |  500.00 | credit           | success | 2026-03-02 |
+|           1003 |        102 | 1000.00 | debit            | failed  | 2026-03-03 |
+|           1004 |        103 |  700.00 | debit            | success | 2026-03-01 |
+|           1005 |        104 |  300.00 | credit           | success | 2026-03-04 |
++----------------+------------+---------+------------------+---------+------------+
+5 rows in set (0.04 sec)
+
+mysql> SELECT *
+    -> FROM transactions;
++----------------+------------+---------+------------------+---------+------------+
+| transaction_id | account_id | amount  | transaction_type | status  | created_at |
++----------------+------------+---------+------------------+---------+------------+
+|           1001 |        101 |  200.00 | debit            | success | 2026-03-01 |
+|           1002 |        101 |  500.00 | credit           | success | 2026-03-02 |
+|           1003 |        102 | 1000.00 | debit            | failed  | 2026-03-03 |
+|           1004 |        103 |  700.00 | debit            | success | 2026-03-01 |
+|           1005 |        104 |  300.00 | credit           | success | 2026-03-04 |
++----------------+------------+---------+------------------+---------+------------+
+5 rows in set (0.00 sec)
+
+
+SELECT few columns
+    Pick only the column you needn instead of All.
+
+SELECT
+Col1,
+COl2,
+FROM Table
+
+-- Retrieve each customer's name, email, and city
+
+mysql> SELECT
+    -> NAME,
+    -> EMAIL,
+    -> CITY
+    -> FROM CUSTOMERS;
++------+----------------+-----------+
+| NAME | EMAIL          | CITY      |
++------+----------------+-----------+
+| Tim  | tim@gmail.com  | Toronto   |
+| Sara | sara@gmail.com | Vancouver |
+| John | john@gmail.com | Toronto   |
++------+----------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT
+    -> name,
+    -> email,
+    -> city,
+    -> FROM customers;
+
+mysql> SELECT
+    -> name,
+    -> email,
+    -> city
+    -> FROM customers;
++------+----------------+-----------+
+| name | email          | city      |
++------+----------------+-----------+
+| Tim  | tim@gmail.com  | Toronto   |
+| Sara | sara@gmail.com | Vancouver |
+| John | john@gmail.com | Toronto   |
++------+----------------+-----------+
+
+##################################  ################################## 
