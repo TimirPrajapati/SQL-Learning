@@ -668,4 +668,107 @@ mysql> SELECT
 | John | john@gmail.com | Toronto   |
 +------+----------------+-----------+
 
-##################################  ################################## 
+################################## WHERE Clause ################################## 
+
+WHERE --> Filters your data based on a condition
+    > < != =
+
+SELECT
+FROM table
+WHERE condition
+
+-- Retrieve account_id where balance is greater than 3000
+
+mysql> SELECT account_id
+    -> FROM accounts
+    -> WHERE balance > 3000;
++------------+
+| account_id |
++------------+
+|        101 |
+|        102 |
+|        103 |
++------------+
+
+mysql> SELECT *
+    -> FROM accounts
+    -> where balance = 5000;
++------------+-------------+--------------+---------+
+| account_id | customer_id | account_type | balance |
++------------+-------------+--------------+---------+
+|        101 |           1 | checking     | 5000.00 |
++------------+-------------+--------------+---------+
+
+################################## ORDER Clause ################################## 
+
+ORDER BY --> Used for sory your data
+    
+    ASC  (Ascending)    -- Lowest To Highest value
+    DESC (Descending)   -- Highest To Lowest value
+
+Default is ASC -- always specify after column
+
+SELECT *
+FROM Table
+ORDER BY balance DESC
+
+
+Retrieve all  and sort the results by the highest balance
+
+mysql> SELECT *
+    -> FROM accounts
+    -> ORDER BY balance DESC;
++------------+-------------+--------------+----------+
+| account_id | customer_id | account_type | balance  |
++------------+-------------+--------------+----------+
+|        102 |           1 | savings      | 10000.00 |
+|        103 |           2 | checking     |  7000.00 |
+|        101 |           1 | checking     |  5000.00 |
+|        104 |           3 | checking     |  3000.00 |
++------------+-------------+--------------+----------+
+
+Retrieve all  and sort the results by the lowest balance
+
+mysql> SELECT *
+    -> FROM accounts
+    -> ORDER BY balance ASC;
++------------+-------------+--------------+----------+
+| account_id | customer_id | account_type | balance  |
++------------+-------------+--------------+----------+
+|        104 |           3 | checking     |  3000.00 |
+|        101 |           1 | checking     |  5000.00 |
+|        103 |           2 | checking     |  7000.00 |
+|        102 |           1 | savings      | 10000.00 |
++------------+-------------+--------------+----------+
+
+
+        (Nested) ORDER BY 
+            Sorting is not performed well when data based in a column that has repetition.
+
+mysql> SELECT *
+    -> FROM accounts
+    -> ORDER BY customer_id ASC,
+    ->          balance DESC;
++------------+-------------+--------------+----------+
+| account_id | customer_id | account_type | balance  |
++------------+-------------+--------------+----------+
+|        102 |           1 | savings      | 10000.00 |
+|        101 |           1 | checking     |  5000.00 |
+|        103 |           2 | checking     |  7000.00 |
+|        104 |           3 | checking     |  3000.00 |
++------------+-------------+--------------+----------+
+
+mysql> SELECT *
+    -> FROM accounts
+    -> ORDER BY customer_id DESC,
+    ->          balance ASC;
++------------+-------------+--------------+----------+
+| account_id | customer_id | account_type | balance  |
++------------+-------------+--------------+----------+
+|        104 |           3 | checking     |  3000.00 |
+|        103 |           2 | checking     |  7000.00 |
+|        101 |           1 | checking     |  5000.00 |
+|        102 |           1 | savings      | 10000.00 |
++------------+-------------+--------------+----------+
+
+
