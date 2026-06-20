@@ -626,7 +626,7 @@ mysql> SELECT *
 
 
 SELECT few columns
-    Pick only the column you needn instead of All.
+    Pick only the column you need instead of All.
 
 SELECT
 Col1,
@@ -701,7 +701,7 @@ mysql> SELECT *
 
 ################################## ORDER Clause ################################## 
 
-ORDER BY --> Used for sory your data
+ORDER BY --> Used for sort your data
     
     ASC  (Ascending)    -- Lowest To Highest value
     DESC (Descending)   -- Highest To Lowest value
@@ -742,8 +742,8 @@ mysql> SELECT *
 +------------+-------------+--------------+----------+
 
 
-        (Nested) ORDER BY 
-            Sorting is not performed well when data based in a column that has repetition.
+(Nested) ORDER BY 
+        Sorting is not performed well when data based in a column that has repetition.
 
 mysql> SELECT *
     -> FROM accounts
@@ -770,5 +770,181 @@ mysql> SELECT *
 |        101 |           1 | checking     |  5000.00 |
 |        102 |           1 | savings      | 10000.00 |
 +------------+-------------+--------------+----------+
+
+
+################################## Group BY ##################################
+
+It combines rows with the same value
+It means it Aggregates a column By Another Column -- SUM(), COUNT(), 
+
+
+Total balance by customer_id
+
+SELECT customer_id
+SUM(balance)
+FROM table
+GROUP BY customer_id
+
+It combines the same customer_id with total balance.
+
+mysql> SELECT CUSTOMER_ID,
+    ->          SUM(BALANCE)
+    -> FROM ACCOUNTS
+    -> GROUP BY CUSTOMER_ID;
++-------------+--------------+
+| CUSTOMER_ID | SUM(BALANCE) |
++-------------+--------------+
+|           1 |     15000.00 |
+|           2 |      7000.00 |
+|           3 |      3000.00 |
++-------------+--------------+
+
+mysql> SELECT CUSTOMER_ID,
+    ->          SUM(BALANCE) AS TOTAL_BALANCE  <-- as TOTAL_BALANCE WILL UPDATE IN PLACE OF BALANCE COL
+    -> FROM ACCOUNTS
+    -> GROUP BY CUSTOMER_ID;
++-------------+---------------+
+| CUSTOMER_ID | TOTAL_BALANCE |
++-------------+---------------+
+|           1 |      15000.00 |
+|           2 |       7000.00 |
+|           3 |       3000.00 |
++-------------+---------------+
+
+Note: As column_name -- it changes the current column name in output only.
+
+mysql> select * from accounts;
++------------+-------------+--------------+----------+
+| account_id | customer_id | account_type | balance  |
++------------+-------------+--------------+----------+
+|        101 |           1 | checking     |  5000.00 |
+|        102 |           1 | savings      | 10000.00 |
+|        103 |           2 | checking     |  7000.00 |
+|        104 |           3 | checking     |  3000.00 |
++------------+-------------+--------------+----------+
+
+################################## HAVING BY ##################################
+
+Filter Aggregated Data It means Filters Data After Aggregation
+Note: So We can only use Having only after Group By
+
+SELECT CUSTOMER_ID,
+        SUM(BALANCE)
+FROM TABLE
+GROUP BY CUSTOMER_ID
+HAVING CONDITION MEANS SUM(BALANCE) > 3000
+
+If we want to filter data before aggregation we use WHERE 
+If we want to filter data after  aggregation we use HAVINNG (CONDITION)
+
+
+################################## DISTINCT ##################################
+
+It removes duplicates (Repeated values) means each value appears only once.
+Don't use DISTINCT unless it's necessary; It can slow down your query. Use for only duplication in your data
+
+SELECT DISTINCT
+       account_type
+FROM table
+
+-- Return unique account_types
+
+mysql> SELECT DISTINCT
+    ->          account_type
+    -> FROM ACCOUNTS;
++--------------+
+| account_type |
++--------------+
+| checking     |
+| savings      |
++--------------+
+
+-- Return unique customer_id
+
+mysql> SELECT DISTINCT
+    ->          CUSTOMER_ID
+    -> FROM ACCOUNTS;
++-------------+
+| CUSTOMER_ID |
++-------------+
+|           1 |
+|           2 |
+|           3 |
++-------------+
+
+################################## TOP ##################################
+
+It uses for limit your data.
+Restrict the number of rows returned.
+
+Note:   In MYSQL use LIMIT
+        In SQL Server use Top
+
+SELECT TOP 3
+*
+FROM TABLE
+
+It will gives only top 3 rows from table.
+
+-- Retrieve only 3 account_id
+
+mysql> SELECT *
+    -> FROM ACCOUNTS
+    -> LIMIT 3;
++------------+-------------+--------------+----------+
+| account_id | customer_id | account_type | balance  |
++------------+-------------+--------------+----------+
+|        101 |           1 | checking     |  5000.00 |
+|        102 |           1 | savings      | 10000.00 |
+|        103 |           2 | checking     |  7000.00 |
++------------+-------------+--------------+----------+
+
+
+Note : SQL Execution Order
+                SELECT
+                FROM
+                WHERE
+                GROUP BY
+                HAVING
+                ORDER BY
+                LIMIT
+
+mysql> SELECT *
+    -> FROm ACCOUNTS
+    -> ORDER BY balance DESC
+    -> LIMIT 2;
++------------+-------------+--------------+----------+
+| account_id | customer_id | account_type | balance  |
++------------+-------------+--------------+----------+
+|        102 |           1 | savings      | 10000.00 |
+|        103 |           2 | checking     |  7000.00 |
++------------+-------------+--------------+----------+
+
+mysql> SELECT *
+    -> FROM ACCOUNTS
+    -> ORDER BY balance ASC
+    -> LIMIT 3;
++------------+-------------+--------------+---------+
+| account_id | customer_id | account_type | balance |
++------------+-------------+--------------+---------+
+|        104 |           3 | checking     | 3000.00 |
+|        101 |           1 | checking     | 5000.00 |
+|        103 |           2 | checking     | 7000.00 |
++------------+-------------+--------------+---------+
+
+##################################
+Execution Order vs Coding Order
+##################################
+
+FROM                    SELECT DISTINCT Top 2
+WHERE                    Col1,
+GROUP BY                 sum(COl2)
+HAVING                  FROM Table
+SELECT DISTINCT         WHERE col = 10 
+ORDER BY                Group By col1
+TOP                     Having Sum(col2) > 30
+                        Order By col1 ASC
+
+
 
 
